@@ -1,4 +1,5 @@
-FROM node:20
+FROM node:18
+# Installing libvips-dev for sharp Compatability
 RUN apt-get update && apt-get install libvips-dev -y
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
@@ -10,5 +11,4 @@ WORKDIR /opt/app
 COPY ./ .
 RUN yarn build
 EXPOSE 1337
-VOLUME /opt/app
 CMD ["yarn", "develop"]
