@@ -1,0 +1,19 @@
+.myCalendar {
+  width: 350px;
+  margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.myCalendar abbr[role="presentation"] {
+  background-color: #ff9800;
+  color: white;
+}
+
+.myCalendar .react-calendar__month-view__days__day--weekend {
+  color: #f44336;
+}
+
+.myCalendar .react-calendar__tile--active {
+  background: #f44336;
+  color: white;
+}
