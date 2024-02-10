@@ -60,7 +60,7 @@ export default function TodoTable({
   setShowModal,
 }) {
   const [inputValue, setInputValue] = useState("");
-
+  const [editId, setEditId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   return (
     <Box
@@ -101,6 +101,8 @@ export default function TodoTable({
 
         <Tbody>
           {todoData.map((todo) => {
+            const isEditing = todo.id === editId;
+
             return (
               <Tr key={todo.id}>
                 <Td>
@@ -108,7 +110,7 @@ export default function TodoTable({
                 </Td>
 
                 <Td>
-                  {isEdit ? (
+                  {isEditing ? (
                     <TodoInput
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
@@ -122,16 +124,20 @@ export default function TodoTable({
                   <TodoCheckbox
                     value={todo.isDone}
                     checkboxID={todo.id}
-                    callback={toggleTodo}
-                    disabled={isEdit}
+                    callback={() => toggleTodo(todo.id)}
+                    disabled={isEditing}
                   />
                 </Td>
 
                 <Td>
-                  {isEdit ? (
+                  {isEditing ? (
                     <Flex style={{ justifyContent: "end" }}>
                       <Button
-                        onClick={() => editTodo(todo.id, { name: inputValue })}
+                        onClick={() => {
+                          editTodo(todo.id, { name: inputValue });
+                          setEditId(null); // Reset editId when done editing
+                          setInputValue(""); // Reset input value when done editing
+                        }}
                       >
                         Save
                       </Button>
@@ -139,7 +145,10 @@ export default function TodoTable({
                   ) : (
                     <Flex style={{ justifyContent: "end" }}>
                       <IconButton
-                        onClick={() => setIsEdit(true)}
+                        onClick={(e) => {
+                          setEditId(todo.id);
+                          setInputValue(todo.name);
+                        }} // Set editId to the current todo item's ID when the edit button is clicked
                         label="Edit"
                         noBorder
                         icon={<Pencil />}
@@ -147,7 +156,7 @@ export default function TodoTable({
 
                       <Box paddingLeft={1}>
                         <IconButton
-                          onClick={() => deleteTodo(todo)}
+                          onClick={() => deleteTodo(todo.id)}
                           label="Delete"
                           noBorder
                           icon={<Trash />}
